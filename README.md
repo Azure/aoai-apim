@@ -7,9 +7,9 @@ While there are already a few reference architectures available for using Azure 
 
 ### Brief Review of AOAI and APIM
 
-Azure OpenAI (AOAI): Azure OpenAI Service provides generative AI technology for all using REST API access to OpenAI's powerful language models including the GPT-4, GPT-35-Turbo, and Embeddings model series and others. You can read additional details on using AOAI here: https://azure.microsoft.com/en-us/products/ai-services/openai-service
+<br>  Azure OpenAI (AOAI): Azure OpenAI Service provides generative AI technology for all using REST API access to OpenAI's powerful language models including the GPT-4, GPT-35-Turbo, and Embeddings model series and others. You can read additional details on using AOAI here: https://azure.microsoft.com/en-us/products/ai-services/openai-service
 
-API Management (APIM): APIs are the foundation of an API Management service instance. Each API represents a set of operations available to app developers.
+<br> API Management (APIM): APIs are the foundation of an API Management service instance. Each API represents a set of operations available to app developers.
 Each API contains a reference to the backend service that implements the API, and its operations map to backend operations. 
 Operations in API Management are highly configurable, with control over URL mapping, query and path parameters, request and response content, and operation response caching. You can read additional details on using APIM here <https://learn.microsoft.com/en-us/azure/api-management/api-management-key-concepts> 
 
