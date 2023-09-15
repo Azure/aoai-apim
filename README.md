@@ -36,7 +36,8 @@ Beyond the default TPMs described above, a new Azure OpenAI service feature call
 
 PTUs are purchased as a monthly commitment with an auto-renewal option, which reserves AOAI capacity against an Azure subscription, in a specific Azure region.
 
-Throughput is highly dependent on your scenario, and will be affected by a few items including number and ratio of prompt and generation tokens, number of simultaneous requests,
+Throughput is highly dependent on your scenario, and will be affected by a few items including number and ratio of prompt and generation tokens, number of simultaneous requests, however here is a table defining
+![image](https://github.com/Azure/aoai-apim/assets/9942991/de2a6f26-e6ae-4fb3-a55a-410ac207d916)
 
 As organizations scale using Azure OpenAI, they may see rate limit on how fast tokens are processed, in their prompt+completion. There is a limit to how much text (prompts) can be sent due to the token limits  for each model that can be consumed in a single request+response from Azure OpenAI Service. It is important to note the overall size of tokens used include BOTH the prompt (text sent to the AOAI model) PLUS the return completion (response back from the model), and also this token size and limt varies for each different AOIA model type. 
 For example,  with a quota of 240,000 TPM for GPT-35-Turbo in Azure East US region, you can have a single deployment of 240K TPM, 2 deployments of 120K TPM each, or any number of deployments in one or multiple deployments as long as the TPMs add up to 240K (or less) total in that region.
@@ -61,34 +62,38 @@ You can enable This can be accomplished via the APIM Retry Policy, https://learn
 	<retry condition="@(context.Response.StatusCode == 429 || context.Response.StatusCode >= 500)" interval="1" delta="1" max-interval="30" count="13">
 
 Note the above error is specifc to an response status code equal to '429', which is the return code for 'server busy', which states too many concurrent requests were sent to the model.
-**And extremely important**: When the APIM **interval, max-interval and delta** parameters are specified, then an **exponential interval retry algorithm** is applied. 
-It is with this exponential retry are you able to scale many thousands of users with very low error responses.
-Without this secret sauce of ,  once the initial rate limts hit with concurrent users, the latency and error issues compound further and further. That is, 
+**And extremely important**: When the APIM **interval, max-interval AND delta** parameters are specified, then an **exponential interval retry algorithm** is automatically applied. 
+It is with this exponential retry special sauce where you able to scale many thousands of users with very low error responses.
+Without this special sauce, then once the initial rate limit is hit, say due to many concurrent users sending prompts, then a '429' error return code (server busy) response is sent back. As addtional subsequent prompts/completions are occuring, then the issue can be compounded quickly as errors are are returned, subsequent is further com the latency and error issues compound further and further. That is, 
+In addition to using Azure APIM supports content based routing. Content based routing is where the message routing endpoint is determined by the contents of the message at runtime. 
+
 
 # Multi-Region
 
 
+
+
 # Best Practices
 
-	### 1. HTTP Return Codes/Errors:  As described in the Special Sauce section above, you can use retries with exponential backoff for any 429 errors
+### 1. HTTP Return Codes/Errors:  As described in the Special Sauce section above, you can use retries with exponential backoff for any 429 errors
 https://learn.microsoft.com/en-us/azure/api-management/retry-policy
 
-	However, you should always configure error checking on the size of prompt vs the model this prompt is intended for.
+However, you should always configure error checking on the size of prompt vs the model this prompt is intended for.
 For example, for GPT-4 (8k), this model supports a max request token limit of 8,192.  If your prompt is 10K in size, then this will fail, AND ALSO any subsequent retries would fail as well, as the token limit size was already exceeded.
 As a best practice, ensure the size of the prompt does not exceed the max request token limit immediately, prior to sending the prompt across the wire to the AOAI service.
 	
 Again here are the token size limits for each model: Azure OpenAI Service models - https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models
-		
-This table describes **a few of the common** HTTP Response Codes from AOAI
 
+  
+This table describes **a few of the common** HTTP Response Codes from AOAI
 HTTP Response Code | Cause | Remediation | Notes
 --- | --- | --- | ---
 200 | Processed the prompt. Completion without error | N/A |
 429 (v0613 AOAI Models)	|  Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff |	When the APIM interval, max-interval and delta are specified, an exponential interval retry algorithm is applied. 
 424 (v0301 AOAI Models)	| Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff | Same as above
 408  | Request timeout | APIM Retry with interval | Many reasons why a timeout could occur, such as a network connection error.
-50x |	Internal server error due to transient error or backend AOAI internal error |	APIM Retry with interval| See Retry Policy Link
-
+50x |	Internal server error due to transient error or backend AOAI internal error |	APIM Retry with interval| See Retry Policy Link below
+800 |	Other issue with the prompt, such as size to large for model type | Use APIM Logic to return custom error immediately | No further processing needed.
 **Retry Policy**: https://learn.microsoft.com/en-us/azure/api-management/retry-policy	
 	
 2. Auto update to Default 
