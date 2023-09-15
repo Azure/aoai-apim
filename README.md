@@ -1,6 +1,6 @@
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/19804cb2-ec27-4a20-914c-166826b31194)
 
-# Azure OpenAI Using PTUs/TPMs With API Management <br>
+# Azure OpenAI Using PTUs/TPMs With API Management\
 - Using the Scaling Special Sauce
 
 ## Introduction
