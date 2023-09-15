@@ -1,99 +1,33 @@
-# Azure Machine Learning (AML) Template
+# Project
 
-[![run-workflows-badge](https://github.com/Azure/azureml-template/workflows/run-workflows/badge.svg)](https://github.com/Azure/azureml-template/actions?query=workflow%3Arun-workflows)
-[![cleanup](https://github.com/Azure/azureml-template/workflows/cleanup/badge.svg)](https://github.com/Azure/azureml-template/actions?query=workflow%3Acleanup)
-[![smoke](https://github.com/Azure/azureml-template/workflows/smoke/badge.svg)](https://github.com/Azure/azureml-template/actions?query=workflow%3Asmoke)
-[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![license: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
+> This repo has been populated by an initial template to help get you started. Please
+> make sure to update the content to build a great experience for community-building.
 
-Welcome to the Azure Machine Learning (AML) template repository!
+As the maintainer of this project, please make a few updates:
 
-## Prerequisites
+- Improving this README.MD file to provide a great experience
+- Updating SUPPORT.MD with content about this project's support experience
+- Understanding the security reporting process in SECURITY.MD
+- Remove this section from the README
 
-1. An Azure subscription. If you don't have an Azure subscription, [create a free account](https://aka.ms/AMLFree) before you begin.
-2. A terminal and Python >=3.6,[\<3.9](https://pypi.org/project/azureml-core).
+## Contributing
 
-## Getting started
+This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
+the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
-Click "Use this template" above and create a repository.
+When you submit a pull request, a CLA bot will automatically determine whether you need to provide
+a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
+provided by the bot. You will only need to do this once across all repos using our CLA.
 
-Follow the setup guide below to add your Azure credentials and create required Azure resources. At the end, you will have a repository with:
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
+contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-- simple LightGBM training workflow running every 2 hours and on push/PR
-- code format check on push/PR
-- resource cleanup script running nightly
+## Trademarks
 
-## Setup
-
-First, export your Azure subscription id as an environment variable:
-
-```console
-export ID=<your-subscription-id>
-```
-
-Second, create the Azure resource group and required AML resources:
-
-```console
-python setup-workspace.py --subscription-id $ID
-```
-
-This will create a resource group named `azureml-template`, a workspace named `default`, and a cluster named `cpu-cluster`. Edit `setup-workspace.py` as needed. If you change the names, ensure you change corresponding names in the `.github/workflows` files and in the third step below.
-
-Third, create a service principal for the resource group:
-
-```console
-az ad sp create-for-rbac --name "azureml-template" \
-                         --role contributor \
-                         --scopes /subscriptions/$ID/resourceGroups/azureml-template \
-                         --sdk-auth
-```
-
-Copy the output json, which looks like this:
-
-```console
-{
-    "clientId": "<GUID>",
-    "clientSecret": "<GUID>",
-    "subscriptionId": "<GUID>",
-    "tenantId": "<GUID>",
-    (...)
-}
-```
-
-In your repository, navigate to "Settings > Secrets > New Secret". Name the secret `AZ_CREDS` and paste the json output from above. This is used in the Azure login action in the GitHub Actions. If you use a different name for the secret, ensure you change the corresponding names in the `.github/workflows` files.
-
-## Contents
-
-Adapt this template to automate the entire ML lifecycle on GitHub, using AML for centralized tracking and scaling up/out on Azure compute.
-
-|directory|description|
-|-|-|
-|`.cloud`|cloud templates|
-|`.github`|GitHub specific files like Actions workflow yaml definitions and issue templates|
-|`notebooks`|interactive jupyter notebooks for iterative ML development|
-|`workflows`|self-contained directories of job/workflow to be run|
-
-## GitHub Actions
-
-Modify all files as needed.
-
-**Actions**:
-
-- [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml) runs on every PR and push to `main` to check code format
-- [`.github/workflows/cleanup.yml`](.github/workflows/cleanup.yml) runs daily and can be used to cleanup AML resources
-- [`.github/workflows/run-workflows.yml`](.github/workflows/run-workflows.yml) runs a ml workflow every two hours and push/PR to `main`
-
-**Other**:
-
-- [`requirements.txt`](requirements.txt) specifies required pip packages for GitHub actions
-- [`setup-workspace.py`](setup-workspace.py) can be modified for workspace and resource setup
-- [`cleanup.py`](cleanup.py) can be modified for nightly workspace cleanup tasks
-- [`workflows/basic/job.py`](workflows/basic/job.py) is the AML control code
-- [`workflows/basic/src/train.py`](workflows/basic/src/train.py) is the ML training script with mlflow tracking
-- [`workflows/basic/requirements.txt`](workflows/basic/requirements.txt) specifies required pip packages for the training script
-
-## Reference
-
-- [Azure Machine Learning Examples](https://github.com/Azure/azureml-examples)
-- [Cheat Sheet, VSCode Snippets, and Templates](https://azure.github.io/azureml-web)
-- [Azure Machine Learning Documentation](https://docs.microsoft.com/azure/machine-learning)
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
+trademarks or logos is subject to and must follow 
+[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
+Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
+Any use of third-party trademarks or logos are subject to those third-party's policies.
