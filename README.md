@@ -15,7 +15,8 @@ Operations in API Management are highly configurable, with control over URL mapp
 
 Azure OpenAI provides an API endpoint to consume the AOAI service, and APIM utilzies this AOAI endpoint.
 
-When using Azure OpenAI with API Management, this gives you the most flexibility in terms of both queing prompts (text sent to AOAI) as well as return code/error handling management. More later in this repo on using APIM with AOAI.
+Using APIM with AOAI, you can manage and implement policies to allow queing, rate throttling, error handling, and manaage usage quotas.
+When using Azure OpenAI with API Management, this gives you the most flexibility in terms of both queing prompts (text sent to AOAI) as well as return code/error handling management. More later in this document on using APIM with AOAI.
 ![image](https://github.com/Azure/AI-in-a-Box/assets/9942991/15d5d9a2-60d4-457e-8d4d-f4a6277cccd2)
 
 
