@@ -25,24 +25,30 @@ First, let's define TPMs and PTUs.  As we continue understanding scaling of the 
 Microsoft recently introduced a new quota management system along with the ability to use reserved capacity, Provisioned Throughput Units (PTU), for AOAI ealrier this summer.  In this article, we will describe both TPMs and PTUs, as this is critical for scaling of services.
 
 ### TPMs
-Azure OpenAI's quota feature enables assignment of rate limits to your deployments, up-to a global limit called your “quota”. Quota is assigned to your subscription on a per-region, per-model basis in units of Tokens-per-Minute (TPM), by default. When you onboard a subscription to Azure OpenAI, you'll receive default quota for most available models. Then, you'll assign TPM to each deployment as it is created, and the available quota for that model will be reduced by that amount. You can learn more about AOAI quota managment here:  https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest
+Azure OpenAI's quota management feature enables assignment of rate limits to your deployments, up-to a global limit called your “quota”. Quota is assigned to your subscription on a per-region, per-model basis in units of Tokens-per-Minute (TPM), by default. This TPM billing is also known as pay-as-you-go, where pricing will be based on the pay-as-you-go consumption model, with a price per unit for each model. When you onboard a subscription to Azure OpenAI, you'll receive default quota for most available models. Then, you'll assign TPM to each deployment as it is created, and the available quota for that model will be reduced by that amount. 
+TPMs/Pay-as-you-go are also the deafult mechanism for billing the AOAI service. Our focus for this article is not billing/pricing, but you can learn more about the AOAI quota managment here:  https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest
 
-A Requests-Per-Minute (RPM) rate limit will also be enforced whose value is set proportionally to the TPM assignment using the following ratio:
+### RPMs
+A Requests-Per-Minutes (RPMs) rate limit will also be enforced whose value is set proportionally to the TPM assignment using the following ratio:
 6 RPM per 1000 TPM
-
-It is important to note that although the billing for AOAI service is token-based (TPM), the actual triggers which rate limit is based on a** per second basis.**. And this rate limit will occur in either TPS (tokens-per-second) or RPS (request-per-second). That is, 
+- Uses [LangChain](https://langchain.readthedocs.io/en/latest/) as a wrapper
+It is important to note that although the billing for AOAI service is token-based (TPM), the actual triggers which rate limit is based occurs:
+1) On a** per second basis.** Not at the per minute billing level. And,
+2) This rate limit will occur at either TPS (tokens-per-second) or RPS (request-per-second). That is, if you exceed the total tokens per second for a specific model, then there is a rate limit applied. In addition, while you can have a small number of TPS, it is possible to then exceed the you can exceed the number of requests per second and rate limiting will kick-in as well.
+All of this can be mitigated with the special sauce described below as well as following some of the best practices described later in this document.
 
 https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest
 
 ### PTUs 
-Beyond the default TPMs described above, a new Azure OpenAI service feature called Provisioned Throughput Units (PTUs), define the model processing capacity, **using reserved resources**, for processing prompts and generating completions.
+Beyond the default TPMs described above, a new Azure OpenAI service feature called Provisioned Throughput Units (PTUs), which defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions.
 
-PTUs are purchased as a monthly commitment with an auto-renewal option, which reserves AOAI capacity against an Azure subscription, in a specific Azure region.
+PTUs are purchased as a monthly commitment with an auto-renewal option, which reserves AOAI capacity against an Azure subscription, using a specific model, in a specific Azure region. 
+Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo 
 
-Throughput is highly dependent on your scenario, and will be affected by a few items including number and ratio of prompt and generation tokens, number of simultaneous requests, however here is a table describing approximate TPMs expected in relation to PTUs, per model. 
+While having reserved capacity does provide consistent latency and througput, the throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompt and generation tokens, number of simultaneous requests, however here is a table describing approximate TPMs expected in relation to PTUs, per model. 
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/de2a6f26-e6ae-4fb3-a55a-410ac207d916)
 
-## LImits
+## Limits
 As organizations scale using Azure OpenAI, they will rate **limits** on how fast tokens are processed, in the prompt+completion. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. It is important to note the overall size of tokens for rate limiing include BOTH the prompt (text sent to the AOAI model) size PLUS the return completion (response back from the model) size, and also this token limt varies for each different AOIA model type. 
 For example,  with a quota of 240,000 TPM for GPT-35-Turbo in Azure East US region, you can have a single deployment of 240K TPM, 2 deployments of 120K TPM each, or any number of deployments in one or multiple deployments as long as the TPMs add up to 240K (or less) total in that region.
 As our customers are scaling, they can add an additional Azure OpenAI account in the same region, as described here: https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal
@@ -95,7 +101,7 @@ HTTP Response Code | Cause | Remediation | Notes
 200 | Processed the prompt. Completion without error | N/A |
 429 (v0613 AOAI Models)	|  Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff |	When the APIM interval, max-interval and delta are specified, an exponential interval retry algorithm is applied. 
 424 (v0301 AOAI Models)	| Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff | Same as above
-408  | Request timeout | APIM Retry with interval | Many reasons why a timeout could occur, such as a network connection error.
+408  | Request timeout | APIM Retry with interval | Many reasons why a timeout could occur, such as a network connection or transient error.
 50x |	Internal server error due to transient error or backend AOAI internal error |	APIM Retry with interval| See Retry Policy Link below
 800 |	Other issue with the prompt, such as size to large for model type | Use APIM Logic to return custom error immediately | No further processing needed.
 **Retry Policy**: https://learn.microsoft.com/en-us/azure/api-management/retry-policy	
@@ -105,9 +111,12 @@ HTTP Response Code | Cause | Remediation | Notes
 As versions of When Auto-update to default is selected your model deployment will be automatically updated within two weeks of a change in the default version.
 	
 If you are still in the early testing phases for inference models, we recommend deploying models with auto-update to default set whenever it is available.
+If the default
+
 3.  Latest + Default Model Deployments
-4. Purchasing PTU's:
-		Billing is up-front for the entire month, starting on the day of purchase
+4. Purchasing PTUs:
+Charges for PTUs are billed **up-front** for the entire month, starting on the day of purchase. The PTUs are not charged in arrears, after the service has been used over the month period.
+Also, the month period is not on exact first of month to the end of the month, but instead when the PTUs were purchased. For example, if you purchased the PTUs
 		
 PTUs can be added to a commitment mid-month, but cannot be reduced
 If a commitment is not renewed, deployed PTUs will revert to per hour pricing
