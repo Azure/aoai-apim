@@ -20,15 +20,17 @@ When using Azure OpenAI with API Management, this gives you the most flexibility
 ![image](https://github.com/Azure/AI-in-a-Box/assets/9942991/15d5d9a2-60d4-457e-8d4d-f4a6277cccd2)
 
 
-## TPMs and PTUs
-First, let's define TPMs and PTUs.  As we continue understanding scaling of the Azure OpenAI service, we Azure OpenAI's quota feature enables assignment of rate limits to your deployments, and also used for billing purposes.
-Microsoft also recently introduced a new quota management system 
-along with the ability to use reserved capacity, Provisioned Throughput Units (PTU), for AOAI.  We will describe both TPMs and PTUs, as this is critical for scaling of services.
+## TPMs, RPMs and PTUs
+First, let's define TPMs and PTUs.  As we continue understanding scaling of the Azure OpenAI service, we Azure OpenAI's quota management feature enables assignment of rate limits to your deployments. TPM's and PTUs are also used for billing purposes.
+Microsoft recently introduced a new quota management system along with the ability to use reserved capacity, Provisioned Throughput Units (PTU), for AOAI ealrier this summer.  In this article, we will describe both TPMs and PTUs, as this is critical for scaling of services.
 
 ### TPMs
-Typically, many organizations will test or scale Azure OpenAI using TPMs, or Tokens Per Minute, the standard default AOAI service. Azure OpenAI's quota feature enables assignment of rate limits to your deployments, up-to a global limit called your “quota.” Quota is assigned to your subscription on a per-region, per-model basis in units of Tokens-per-Minute (TPM), by default. When you onboard a subscription to Azure OpenAI, you'll receive default quota for most available models. Then, you'll assign TPM to each deployment as it is created, and the available quota for that model will be reduced by that amount. You can learn more about AOAI quota managment here:  https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest
+Azure OpenAI's quota feature enables assignment of rate limits to your deployments, up-to a global limit called your “quota”. Quota is assigned to your subscription on a per-region, per-model basis in units of Tokens-per-Minute (TPM), by default. When you onboard a subscription to Azure OpenAI, you'll receive default quota for most available models. Then, you'll assign TPM to each deployment as it is created, and the available quota for that model will be reduced by that amount. You can learn more about AOAI quota managment here:  https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest
 
-It is important to note that although the billing for AOAI service is token-based (TPM), the actual triggers which rate limit is based on a per second basis. That is, if you are using a GPT-4 (8K) model with an 8K limit, and have concurrent users, the token limit is throttled at whatever the maximum is, based on the model limit.
+A Requests-Per-Minute (RPM) rate limit will also be enforced whose value is set proportionally to the TPM assignment using the following ratio:
+6 RPM per 1000 TPM
+
+It is important to note that although the billing for AOAI service is token-based (TPM), the actual triggers which rate limit is based on a** per second basis.**. And this rate limit will occur in either TPS (tokens-per-second) or RPS (request-per-second). That is, 
 
 https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest
 
@@ -37,10 +39,11 @@ Beyond the default TPMs described above, a new Azure OpenAI service feature call
 
 PTUs are purchased as a monthly commitment with an auto-renewal option, which reserves AOAI capacity against an Azure subscription, in a specific Azure region.
 
-Throughput is highly dependent on your scenario, and will be affected by a few items including number and ratio of prompt and generation tokens, number of simultaneous requests, however here is a table defining
+Throughput is highly dependent on your scenario, and will be affected by a few items including number and ratio of prompt and generation tokens, number of simultaneous requests, however here is a table describing approximate TPMs expected in relation to PTUs, per model. 
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/de2a6f26-e6ae-4fb3-a55a-410ac207d916)
 
-As organizations scale using Azure OpenAI, they may see rate limit on how fast tokens are processed, in their prompt+completion. There is a limit to how much text (prompts) can be sent due to the token limits  for each model that can be consumed in a single request+response from Azure OpenAI Service. It is important to note the overall size of tokens used include BOTH the prompt (text sent to the AOAI model) PLUS the return completion (response back from the model), and also this token size and limt varies for each different AOIA model type. 
+## LImits
+As organizations scale using Azure OpenAI, they will rate **limits** on how fast tokens are processed, in the prompt+completion. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. It is important to note the overall size of tokens for rate limiing include BOTH the prompt (text sent to the AOAI model) size PLUS the return completion (response back from the model) size, and also this token limt varies for each different AOIA model type. 
 For example,  with a quota of 240,000 TPM for GPT-35-Turbo in Azure East US region, you can have a single deployment of 240K TPM, 2 deployments of 120K TPM each, or any number of deployments in one or multiple deployments as long as the TPMs add up to 240K (or less) total in that region.
 As our customers are scaling, they can add an additional Azure OpenAI account in the same region, as described here: https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal
 
