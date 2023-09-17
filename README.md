@@ -104,7 +104,7 @@ A single API Management service can easily scale and support many AOAI accounts,
 
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/0a213a72-4006-4eda-abcc-50c534100c4e)
 
-Please take a lookg at the multi-region APIM best practices below (item #4) to understand when to use additional APIM instances.
+Please take a look at the multi-region APIM best practices below (item #4) to understand when to use additional APIM instances.
 
 # Best Practices
 
@@ -142,10 +142,11 @@ Please take a lookg at the multi-region APIM best practices below (item #4) to u
 	Azure API Management has 3 _production_ level tiers - Basic, Standard, and Premium.
 	The Premium tier enables you to distribute a single Azure API Management instance across any number of desired Azure regions. When you initially create an Azure API Management service, the instance contains only one unit and resides in a single Azure region (the primary region).
 
-	What does this provide? If you have a multi-regional Azure OpenAI deployment, does this mean you are required to also have a multi-region (Premium) SKU of APIM? No, not necessarily. As you can see in the multi-region archiecture above, a single APIM service instance can support multi-region, multi-AOAI accounts. Having a single APIM service makes sense when an application using the service is in the same region. If you have a secondary APIM service instance in another region, this
-The Premium SKU gives you is the ability to have one region be the primary and any number of regions as seondaries. Then when should use secondary, or secondaries? 
-   a. If you are planning for any DR scenarios, which is always recommeneded for any enterprise architecture. Note: Your enterprise applications should then also be designed for data resilency, using DR strategies.
-   b. If you . As you are monitoring the APIM services, if you are seeing extremely heavy usage and can scale out your applications across regions, then it does make s
+	What does this provide? If you have a multi-regional Azure OpenAI deployment, does this mean you are required to also have a multi-region (Premium) SKU of APIM? No, not necessarily. As you can see in the multi-region archiecture above, a single APIM service instance can support multi-region, multi-AOAI accounts. Having a single APIM service makes sense when an application using the service is in the same region and you do not need DR.
+
+	The Premium SKU gives you is the ability to have one region be the primary and any number of regions as seondaries. Then when should use secondary, or secondaries?
+	a. If you are planning for any DR scenarios, which is always recommeneded for any enterprise architecture. Note: Your enterprise applications should then also be designed for data resilency, using DR strategies.
+	b. If you . As you are monitoring the APIM services, if you are seeing extremely heavy usage and can scale out your applications across regions, then you may want to deploy APIM service instnaces across multiple regions.
 
 	For more information on [how to deploy an Azure API Management service instance to multiple Azure regions](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-deploy-multi-region).
 
