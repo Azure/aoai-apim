@@ -107,36 +107,32 @@ Please take a lookg at the multi-region APIM best practices below (item #4) to u
 
 # Best Practices
 
-1. HTTP Return Codes/Errors: 
-As described in the Special Sauce section above, you can use retries with exponential backoff for any 429 errors, based on the [APIM Retry Policy document](https://learn.microsoft.com/en-us/azure/api-management/retry-policy).
-
-However, as a best practice, you should always configure error checking on the size of prompt vs the model this prompt is intended for, first.
-For example, for GPT-4 (8k), this model supports a max request token limit of 8,192.  If your prompt is 10K in size, then this will fail, AND ALSO any subsequent retries would fail as well, as the token limit size was already exceeded.
-As a best practice, ensure the size of the prompt does not exceed the max request token limit immediately, prior to sending the prompt across the wire to the AOAI service.
-	
-Again here are the [token size limits for each model](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models).
+1. HTTP Return Codes/Errors  	 
+	As described in the Special Sauce section above, you can use retries with exponential backoff for any 429 errors, based on the [APIM Retry Policy document](https://learn.microsoft.com/en-us/azure/api-management/retry-policy).
+	However, as a best practice, you should always configure error checking on the size of prompt vs the model this prompt is intended for, first.For example, for GPT-4 (8k), this model supports a max request token limit of 8,192.  If your prompt is 10K in size, then this will fail, AND ALSO any subsequent retries would fail as well, as the token limit size was already exceeded.
+	As a best practice, ensure the size of the prompt does not exceed the max request token limit immediately, prior to sending the prompt across the wire to the AOAI service. Again here are the [token size limits for each model](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models).
   
-This table describes **a few of the common** HTTP Response Codes for AOAI:
-HTTP Response Code | Cause | Remediation | Notes
---- | --- | --- | ---
-200 | Processed the prompt. Completion without error | N/A |
-429 (v0613 AOAI Models)	|  Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff |When APIM interval, max-interval and delta are specified, an exponential interval retry algorithm is automatically applied.
-424 (v0301 AOAI Models)	| Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff | Same as above
-408  | Request timeout | APIM Retry with interval | Many reasons why a timeout could occur, such as a network connection/transient error.
-50x |	Internal server error due to transient error or backend AOAI internal error |	APIM Retry with interval| See Retry Policy Link below
-800 |	Other issue with the prompt, such as size too large for model type | Use APIM Logic to return custom error immediately | No further processing needed.
+	This table describes **a few of the common** HTTP Response Codes for AOAI:
+	HTTP Response Code | Cause | Remediation | Notes
+	--- | --- | --- | ---
+	200 | Processed the prompt. Completion without error | N/A |
+	429 (v0613 AOAI Models)	|  Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff |When APIM interval, max-interval and delta are 	specified, an exponential interval retry algorithm is automatically applied.
+	424 (v0301 AOAI Models)	| Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff | Same as above
+	408  | Request timeout | APIM Retry with interval | Many reasons why a timeout could occur, such as a network connection/transient error.
+	50x |	Internal server error due to transient error or backend AOAI internal error |	APIM Retry with interval| See Retry Policy Link below
+	800 |	Other issue with the prompt, such as size too large for model type | Use APIM Logic to return custom error immediately | No further processing needed.
 
-**Retry Policy**: https://learn.microsoft.com/en-us/azure/api-management/retry-policy	
+	**Retry Policy**: https://learn.microsoft.com/en-us/azure/api-management/retry-policy	
 	
 2. Auto-update to Default and Default Models
 
 	If you are still in the early testing phases for inference models, we recommend deploying models with the 'auto-update to default' set whenever it is available.When a new model version is introduced, you will want to ensure your applications and services are tested and working as expected against the latest version first. It is a best practice not to make newest model the DEFAULT until after sucessful testing and until the organization is ready to move to the newer model. After sucessful integration testing, you can make the latest model the default, which will then update the model deployment automatically within two weeks of a change in the default version.
 
-![image](https://github.com/Azure/aoai-apim/assets/9942991/ca44d6fc-4336-44d6-8e73-b8b71ade19fb)
+	![image](https://github.com/Azure/aoai-apim/assets/9942991/ca44d6fc-4336-44d6-8e73-b8b71ade19fb)
 
-3. Purchasing PTUs:
+**3. Purchasing PTUs**
 Charges for PTUs are billed **up-front** for the entire month, starting on the day of purchase. The PTUs are not charged in arrears, after the service has been used over the month period.
-Also, the month period is not on exact first of month to the end of the month, but instead when the PTUs were purchased. For example, if you purchased the PTUs
+Also, the month period is not on exact first of month to the end of the month, but instead when the PTUs were purchased. For example, if you purchased and applied the PTUs on the 9th day of the month, then you will be
 		
 PTUs can be added to a commitment mid-month, but cannot be reduced
 If a commitment is not renewed, deployed PTUs will revert to per hour pricing
