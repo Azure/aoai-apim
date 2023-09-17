@@ -132,10 +132,10 @@ Please take a lookg at the multi-region APIM best practices below (item #4) to u
 	![image](https://github.com/Azure/aoai-apim/assets/9942991/ca44d6fc-4336-44d6-8e73-b8b71ade19fb)
 
 3. Purchasing PTUs
-   Charges for PTUs are billed **up-front** for the entire month, starting on the day of purchase. The PTUs are not charged in arrears, after the service has been used over the month period.
-   Also, the month period does not necessarily on exact first of month to the end of the month, but instead when the PTUs were purchased. For example, if you purchased and applied the PTUs on the 9th day of the month, then you will be charged from the 9th until the following month, 8th day.
-   * As the term of the committment is one month, PTUs can not be reduced. However, PTUs can be _added_ to a commitment mid-month.
-   * If a commitment is not renewed, deployed PTUs will be reverted to to per hour pricing.
+	* Charges for PTUs are billed **up-front** for the entire month, starting on the day of purchase. The PTUs are not charged in arrears, that is, after the service has been used over the month period.
+	* The month period does not necessarily on exact first of month to the end of the month, but instead when the PTUs were purchased. For example, if you purchased and applied the PTUs on the 9th day of the month, then you will be charged from the 9th until the following month, 8th day.
+   	* As the term of the committment is one month, PTUs can not be reduced. However, PTUs can be _added_ to a commitment mid-month.
+   	* If a commitment is not renewed, deployed PTUs will be reverted to to per hour pricing.
 			
 4. Multi-Region APIM:
 	Azure API Management has 3 _production_ level tiers - Basic, Standard, and Premium.
@@ -148,9 +148,9 @@ The Premium SKU gives you is the ability to have one region be the primary and a
 	For more information on [how to deploy an Azure API Management service instance to multiple Azure regions](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-deploy-multi-region).
 
 ### Additional Best Practices 
-Rate limit best practices from <https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest> 
+[Rate limit best practices](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest#rate-limit-best-practices)
 
-To minimize issues related to rate limits, it's a good idea to use the following techniques:
+To minimize issues related to rate limits, use the following techniques:
 * Set max_tokens and best_of to the minimum values that serve the needs of your scenario. For example, don’t set a large max-tokens value if you expect your responses to be small as this may increase response times.
 * Use quota management to increase TPM on deployments with high traffic, and to reduce TPM on deployments with limited needs.
 * Avoid sharp changes in the workload. Increase the workload gradually.
