@@ -133,33 +133,33 @@ Please take a lookg at the multi-region APIM best practices below (item #4) to u
 
 3. Purchasing PTUs
 	* Charges for PTUs are billed **up-front** for the entire month, starting on the day of purchase. The PTUs are not charged in arrears, that is, after the service has been used over the month period.
-	* The month period does not necessarily on exact first of month to the end of the month, but instead when the PTUs were purchased. For example, if you purchased and applied the PTUs on the 9th day of the month, then you will be charged from the 9th until the following month, 8th day.
+	* The month period does not necessarily fall exactlyt on the first day of month to the last day of each month, but instead when the PTUs were purchased. For example, if you purchased and applied the PTUs on the 9th day of the month, then you will be charged from the 9th until the following month, 8th day.
    	* As the term of the committment is one month, PTUs can not be reduced. However, PTUs can be _added_ to a commitment mid-month.
    	* If a commitment is not renewed, deployed PTUs will be reverted to to per hour pricing.
 			
-4. Multi-Region APIM:
+4. Multi-Region APIM
 	Azure API Management has 3 _production_ level tiers - Basic, Standard, and Premium.
 	The Premium tier enables you to distribute a single Azure API Management instance across any number of desired Azure regions. When you initially create an Azure API Management service, the instance contains only one unit and resides in a single Azure region (the primary region).
 	What does this provide? If you have a multi-regional Azure OpenAI deployment, does this mean you are required to also have a multi-region (Premium) SKU of APIM? No, not necessarily! As you can see in the multi-region archiecture above, a single APIM service instance can support multi-region, multi-AOAI accounts. Having a single APIM service makes sense when an application using the service is in the same region. If you have a secondary APIM service instance in another region, this
 The Premium SKU gives you is the ability to have one region be the primary and any number of regions as seondaries. Then when should use secondary, or secondaries? 
-	1> If you are planning for any DR scenarios, which is always recommeneded for any enterprise architecture. Note: Your enterprise applications should then also be designed for data resilency, using DR strategies.
-   2> If you . As you are monitoring the APIM services, if you are seeing extremely heavy usage and can scale out your applications across regions, then it does make s
+   a. If you are planning for any DR scenarios, which is always recommeneded for any enterprise architecture. Note: Your enterprise applications should then also be designed for data resilency, using DR strategies.
+   b. If you . As you are monitoring the APIM services, if you are seeing extremely heavy usage and can scale out your applications across regions, then it does make s
 
 	For more information on [how to deploy an Azure API Management service instance to multiple Azure regions](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-deploy-multi-region).
 
 ### Additional Best Practices 
-[Rate limit best practices](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest#rate-limit-best-practices)
-
 To minimize issues related to rate limits, use the following techniques:
 * Set max_tokens and best_of to the minimum values that serve the needs of your scenario. For example, don’t set a large max-tokens value if you expect your responses to be small as this may increase response times.
 * Use quota management to increase TPM on deployments with high traffic, and to reduce TPM on deployments with limited needs.
 * Avoid sharp changes in the workload. Increase the workload gradually.
 * Test different load increase patterns.
 
-## Reference
+## References
 
+- [APIM Retry Policy document](https://learn.microsoft.com/en-us/azure/api-management/retry-policy).
 - [Enterprise Azure OpenAI Monitoring and Logging](https://github.com/Azure-Samples/openai-python-enterprise-logging)
-
+- [Rate limit best practices](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest#rate-limit-best-practices)
+  
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
