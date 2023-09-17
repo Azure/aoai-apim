@@ -42,7 +42,7 @@ The throttled rate limits can easily be managed using the scaling special sauce,
 You can read about [quota management and the details on how TPM/RPM rate limits apply](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest).
 
 ### PTUs 
-Microsoft recently introduced the ability to use reserved capacity, Provisioned Throughput Units (PTU), for AOAI earlier this summer.
+Microsoft recently introduced the ability to use reserved capacity, or Provisioned Throughput Units (PTU), for AOAI earlier this summer.
 Beyond the default TPMs described above, this new Azure OpenAI service feature, PTUs, defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions.  
 PTUs are purchased as a monthly commitment with an auto-renewal option, which will RESERVE AOAI capacity within an Azure subscription, using a specific model, in a specific Azure region. 
 Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo, the PTUs are provisioned for only GPT 3.5 Turbo deployments, wihtin a specific Azure subscription, and not for GPT 4. You can have seperate PTUs for GPT 4, with minimum PTUs described in the table below.  
@@ -51,8 +51,8 @@ Keep in mind, while having reserved capacity does provide consistent latency and
 
 <p align="center">
 Table describing approximate TPMs expected in relation to PTUs, per model. 
-![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
 </p>
+![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
 
 ## Limits
 As organizations scale using Azure OpenAI, they will rate **limits** on how fast tokens are processed, in the prompt+completion. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. It is important to note the overall size of tokens for rate limiing include BOTH the prompt (text sent to the AOAI model) size PLUS the return completion (response back from the model) size, and also this token limt varies for each different AOIA model type. 
