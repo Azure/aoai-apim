@@ -99,25 +99,24 @@ For example, if your model API request states a specific version, say gpt-35-tur
 
 # Best Practices
 
-### 1. HTTP Return Codes/Errors:  As described in the Special Sauce section above, you can use retries with exponential backoff for any 429 errors
-https://learn.microsoft.com/en-us/azure/api-management/retry-policy
+### 1. HTTP Return Codes/Errors: 
+As described in the Special Sauce section above, you can use retries with exponential backoff for any 429 errors, as described in the [APIM Retry Policy document](https://learn.microsoft.com/en-us/azure/api-management/retry-policy).
 
-However, you should always configure error checking on the size of prompt vs the model this prompt is intended for.
+However, as a best practice, you should always configure error checking on the size of prompt vs the model this prompt is intended for.
 For example, for GPT-4 (8k), this model supports a max request token limit of 8,192.  If your prompt is 10K in size, then this will fail, AND ALSO any subsequent retries would fail as well, as the token limit size was already exceeded.
 As a best practice, ensure the size of the prompt does not exceed the max request token limit immediately, prior to sending the prompt across the wire to the AOAI service.
 	
-Again here are the token size limits for each model: Azure OpenAI Service models - https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models
-
+Again here are the [token size limits for each model](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models).
   
-This table describes **a few of the common** HTTP Response Codes from AOAI
+This table describes **a few of the common** HTTP Response Codes for AOAI:
 HTTP Response Code | Cause | Remediation | Notes
 --- | --- | --- | ---
 200 | Processed the prompt. Completion without error | N/A |
-429 (v0613 AOAI Models)	|  Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff |When APIM interval, max-interval and delta are specified, an exponential interval retry algorithm is applied.
+429 (v0613 AOAI Models)	|  Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff |When APIM interval, max-interval and delta are specified, an exponential interval retry algorithm is automatically applied.
 424 (v0301 AOAI Models)	| Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff | Same as above
 408  | Request timeout | APIM Retry with interval | Many reasons why a timeout could occur, such as a network connection/transient error.
 50x |	Internal server error due to transient error or backend AOAI internal error |	APIM Retry with interval| See Retry Policy Link below
-800 |	Other issue with the prompt, such as size to large for model type | Use APIM Logic to return custom error immediately | No further processing needed.
+800 |	Other issue with the prompt, such as size too large for model type | Use APIM Logic to return custom error immediately | No further processing needed.
 
 **Retry Policy**: https://learn.microsoft.com/en-us/azure/api-management/retry-policy	
 	
