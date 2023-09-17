@@ -125,7 +125,7 @@ Please take a look at the multi-region APIM best practices below (item #4) to un
 
 	**Retry Policy**: https://learn.microsoft.com/en-us/azure/api-management/retry-policy	
 	
-2. Auto-update to Default and Default Models
+2. Auto-update to Default and Setting Default Models
 
 	If you are still in the early testing phases for inference models, we recommend deploying models with the 'auto-update to default' set whenever it is available.When a new model version is introduced, you will want to ensure your applications and services are tested and working as expected against the latest version first. It is a best practice not to make newest model the DEFAULT until after sucessful testing and until the organization is ready to move to the newer model. After sucessful integration testing, you can make the latest model the default, which will then update the model deployment automatically within two weeks of a change in the default version.
 
