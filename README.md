@@ -51,7 +51,7 @@ Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo, the PTUs are provi
 Keep in mind, while having reserved capacity does provide consistent latency and througput, throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompts and generation tokens, number of simultaneous requests, and the type and version of model used.
 
 Table describing approximate TPMs expected in relation to PTUs, per model. 
-![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
+![image](https://github.com/Azure/aoai-apim/assets/9942991/5fb56ef8-2a0c-4575-b757-62d5592e00ce)
 
 ## Limits
 As organizations scale using Azure OpenAI, as described above, there are rate **limits** on how fast tokens are processed, in the prompt+completion request. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. 
@@ -123,6 +123,7 @@ HTTP Response Code | Cause | Remediation | Notes
 2. Auto-update to Default and Default Models
 
 	If you are still in the early testing phases for inference models, we recommend deploying models with the 'auto-update to default' set whenever it is available.
+
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/1e201510-b724-491b-b7d1-d2ea3bd4d080)
 
 When a new model version is introduced, you will want to ensure your applications and services are tested and working as expected against the latest version first. It is a best practice not to make newest model the DEFAULT until after sucessful testing and until the organization is ready to move to the newer model. After sucessful integration testing, you can make the latest model the default, which will then update the model deployment automatically within two weeks of a change in the default version.
