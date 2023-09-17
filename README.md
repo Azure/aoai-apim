@@ -120,15 +120,14 @@ HTTP Response Code | Cause | Remediation | Notes
 
 **Retry Policy**: https://learn.microsoft.com/en-us/azure/api-management/retry-policy	
 	
-2. Auto update to Default 
-
-As versions of When Auto-update to default is selected your model deployment will be automatically updated within two weeks of a change in the default version.
+2. Auto-update to Default and Default Models
 	
-If you are still in the early testing phases for inference models, we recommend deploying models with auto-update to default set whenever it is available.
-If the default
+If you are still in the early testing phases for inference models, we recommend deploying models with the 'auto-update to default' set whenever it is available.
+![image](https://github.com/Azure/aoai-apim/assets/9942991/1e201510-b724-491b-b7d1-d2ea3bd4d080)
 
-3.  Latest + Default Model Deployments
-4. Purchasing PTUs:
+When a new model version is introduced, you will want to ensure your applications and services are tested and working as expected against the latest version first. It is a best practice not to make newest model the DEFAULT until after sucessful testing and until the organization is ready to move to the newer model. After sucessful integration testing, you can make the latest model the default, which will then update the model deployment automatically within two weeks of a change in the default version.
+
+3. Purchasing PTUs:
 Charges for PTUs are billed **up-front** for the entire month, starting on the day of purchase. The PTUs are not charged in arrears, after the service has been used over the month period.
 Also, the month period is not on exact first of month to the end of the month, but instead when the PTUs were purchased. For example, if you purchased the PTUs
 		
@@ -136,8 +135,8 @@ PTUs can be added to a commitment mid-month, but cannot be reduced
 If a commitment is not renewed, deployed PTUs will revert to per hour pricing
 		
 	
-5.  Multi-Region APIM:
-	Azure API Management has 3 production level tiers - Basic, Standard, and Premium.
+4.  Multi-Region APIM:
+	Azure API Management has 3 _production_ level tiers - Basic, Standard, and Premium.
 Upgrade and scale an Azure API Management instance | Microsoft Learn
 	
 The Premium tier enables you to distribute a single Azure API Management instance across any number of desired Azure regions. When you initially create an Azure API Management service, the instance contains only one unit and resides in a single Azure region (the primary region).
