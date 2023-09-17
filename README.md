@@ -44,17 +44,19 @@ You can read about [quota management and the details on how TPM/RPM rate limits 
 ### PTUs 
 Microsoft recently introduced the ability to use reserved capacity, or Provisioned Throughput Units (PTU), for AOAI earlier this summer.
 Beyond the default TPMs described above, this new Azure OpenAI service feature, PTUs, defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions.  
+
 PTUs are purchased as a monthly commitment with an auto-renewal option, which will RESERVE AOAI capacity within an Azure subscription, using a specific model, in a specific Azure region. 
 Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo, the PTUs are provisioned for only GPT 3.5 Turbo deployments, wihtin a specific Azure subscription, and not for GPT 4. You can have seperate PTUs for GPT 4, with minimum PTUs described in the table below.  
 
 Keep in mind, while having reserved capacity does provide consistent latency and througput, throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompts and generation tokens, number of simultaneous requests, and the type and version of model used.
 
 Table describing approximate TPMs expected in relation to PTUs, per model. 
-img src=![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
+![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
 
 ## Limits
-As organizations scale using Azure OpenAI, there will rate **limits** on how fast tokens are processed, in the prompt+completion as described in the previous section. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. 
+As organizations scale using Azure OpenAI, as described above, there are rate **limits** on how fast tokens are processed, in the prompt+completion request. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. 
 It is important to note the overall size of tokens for rate limiing include BOTH the prompt (text sent to the AOAI model) size PLUS the return completion (response back from the model) size, and also this token limt varies for each different AOIA model type. 
+
 For example,  with a quota of 240,000 TPM for GPT-35-Turbo in Azure East US region, you can have a single deployment of 240K TPM, 2 deployments of 120K TPM each, or any number of deployments in one or multiple deployments as long as the TPMs add up to 240K (or less) total in that region in East US.
 
 As our customers are scaling, they can [add an additional Azure OpenAI accounts](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal).
@@ -62,9 +64,10 @@ As our customers are scaling, they can [add an additional Azure OpenAI accounts]
 The maximum Azure OpenAI resources per region per Azure subscription is 30 (at the time of this writing) and also dependant on regional capacity **availability.** 
 
 # Scaling (Single Region)
-There are other articles/repos which describe this basic scenario, and also provide configurations for the basic APIM setup used with AOAI, so we will not re-invent the wheel here. Example: https://github.com/Azure-Samples/openai-python-enterprise-logging
+There are other articles/repos which describe this basic scenario, and also provide configurations for the basic APIM setup used with AOAI, so we will not re-invent the wheel here. Examples are in the Reference Section near the end of this article. 
+Here is the basic setup
 
-![image](https://github.com/Azure/AI-in-a-Box/assets/9942991/fb524952-564b-4623-9d70-c54a1f5a869d)
+Insert single region Visio here.
 
 Now is a good time to introduce how to queue messages for AOAI AND also manage the rate limits for the model deployments.
 
@@ -150,9 +153,7 @@ To minimize issues related to rate limits, it's a good idea to use the following
 
 ## Reference
 
-- [Azure Machine Learning Examples](https://github.com/Azure/azureml-examples)
-- [Cheat Sheet, VSCode Snippets, and Templates](https://azure.github.io/azureml-web)
-- [Azure Machine Learning Documentation](https://docs.microsoft.com/azure/machine-learning)
+- [Enterprise Azure OpenAI Monitoring and Logging](https://github.com/Azure-Samples/openai-python-enterprise-logging)
 
 ## Contributing
 
