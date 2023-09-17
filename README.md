@@ -99,10 +99,10 @@ For example, if your model API request states a specific version, say gpt-35-tur
 
 # Best Practices
 
-### 1. HTTP Return Codes/Errors: 
-As described in the Special Sauce section above, you can use retries with exponential backoff for any 429 errors, as described in the [APIM Retry Policy document](https://learn.microsoft.com/en-us/azure/api-management/retry-policy).
+1. HTTP Return Codes/Errors: 
+As described in the Special Sauce section above, you can use retries with exponential backoff for any 429 errors, based on the [APIM Retry Policy document](https://learn.microsoft.com/en-us/azure/api-management/retry-policy).
 
-However, as a best practice, you should always configure error checking on the size of prompt vs the model this prompt is intended for.
+However, as a best practice, you should always configure error checking on the size of prompt vs the model this prompt is intended for, first.
 For example, for GPT-4 (8k), this model supports a max request token limit of 8,192.  If your prompt is 10K in size, then this will fail, AND ALSO any subsequent retries would fail as well, as the token limit size was already exceeded.
 As a best practice, ensure the size of the prompt does not exceed the max request token limit immediately, prior to sending the prompt across the wire to the AOAI service.
 	
@@ -121,8 +121,8 @@ HTTP Response Code | Cause | Remediation | Notes
 **Retry Policy**: https://learn.microsoft.com/en-us/azure/api-management/retry-policy	
 	
 2. Auto-update to Default and Default Models
-	
-If you are still in the early testing phases for inference models, we recommend deploying models with the 'auto-update to default' set whenever it is available.
+
+	If you are still in the early testing phases for inference models, we recommend deploying models with the 'auto-update to default' set whenever it is available.
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/1e201510-b724-491b-b7d1-d2ea3bd4d080)
 
 When a new model version is introduced, you will want to ensure your applications and services are tested and working as expected against the latest version first. It is a best practice not to make newest model the DEFAULT until after sucessful testing and until the organization is ready to move to the newer model. After sucessful integration testing, you can make the latest model the default, which will then update the model deployment automatically within two weeks of a change in the default version.
