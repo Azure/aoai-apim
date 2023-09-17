@@ -98,11 +98,12 @@ For example, if your model API request states a specific version, say gpt-35-tur
 
 # Multi-Region
 
-As described in the single-region scenario above, you can use APIM to queue and send prompts to any AOAI endpoint, as long as those endpoints can be reached. In a multi-region example below, we have two AOAI accounts in one region (one PTU and another TPM), and then a 3rd Azure OpenAI account in another Azure region.  A single API Management service is easily able to scale and support many AOAI accounts, even across multiple regions.
+As described in the single-region scenario above, you can use APIM to queue and send prompts to any AOAI endpoint, as long as those endpoints can be reached. In a multi-region example below, we have two AOAI accounts in one region (one PTU and another TPM), and then a 3rd Azure OpenAI account in another Azure region.  
+A API Management service is easily able to scale and support many AOAI accounts, even across multiple regions.
 
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/0a213a72-4006-4eda-abcc-50c534100c4e)
 
-Please take a lookg at the multi-region APIM best practices below.
+Please take a lookg at the multi-region APIM best practices below (item #4) to understand when to use additional APIM instnaces.
 
 # Best Practices
 
@@ -129,11 +130,9 @@ HTTP Response Code | Cause | Remediation | Notes
 	
 2. Auto-update to Default and Default Models
 
-	If you are still in the early testing phases for inference models, we recommend deploying models with the 'auto-update to default' set whenever it is available.
+	If you are still in the early testing phases for inference models, we recommend deploying models with the 'auto-update to default' set whenever it is available.When a new model version is introduced, you will want to ensure your applications and services are tested and working as expected against the latest version first. It is a best practice not to make newest model the DEFAULT until after sucessful testing and until the organization is ready to move to the newer model. After sucessful integration testing, you can make the latest model the default, which will then update the model deployment automatically within two weeks of a change in the default version.
 
-![image](https://github.com/Azure/aoai-apim/assets/9942991/1e201510-b724-491b-b7d1-d2ea3bd4d080)
-
-When a new model version is introduced, you will want to ensure your applications and services are tested and working as expected against the latest version first. It is a best practice not to make newest model the DEFAULT until after sucessful testing and until the organization is ready to move to the newer model. After sucessful integration testing, you can make the latest model the default, which will then update the model deployment automatically within two weeks of a change in the default version.
+![image](https://github.com/Azure/aoai-apim/assets/9942991/ca44d6fc-4336-44d6-8e73-b8b71ade19fb)
 
 3. Purchasing PTUs:
 Charges for PTUs are billed **up-front** for the entire month, starting on the day of purchase. The PTUs are not charged in arrears, after the service has been used over the month period.
