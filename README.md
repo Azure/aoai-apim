@@ -39,7 +39,7 @@ While RPM is not a billing component directly, it is important to note that whil
 
 The throttled rate limits can easily be managed using the scaling special sauce, as well as following some of the best practices described later in this document.
 
-You can read about [quota management and the details on how TPM/RPM rate limits apply](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest).
+You can read more about [quota management and the details on how TPM/RPM rate limits apply](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest).
 
 ### PTUs 
 Microsoft recently introduced the ability to use reserved capacity, or Provisioned Throughput Units (PTU), for AOAI earlier this summer.
@@ -53,7 +53,6 @@ Keep in mind, while having reserved capacity does provide consistent latency and
 Table describing approximate TPMs expected in relation to PTUs, per model.
 
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/b24f5193-92cc-4cef-af73-e172b9ad1b73)
-
 
 
 ## Limits
@@ -70,9 +69,10 @@ The maximum Azure OpenAI resources per region per Azure subscription is 30 (at t
 There are other articles/repos which describe this basic scenario, and also provide configurations for the basic APIM setup used with AOAI, so we will not re-invent the wheel here. Examples are in the Reference Section near the end of this article. 
 Here is the basic setup
 
-Insert single region Visio here.
+![image](https://github.com/Azure/aoai-apim/assets/9942991/a3f45c8d-0bcf-4302-8142-26c5842126cd)
 
-Now is a good time to introduce how to queue messages for AOAI AND also manage the rate limits for the model deployments.
+
+Now is a good time to introduce on scaling, how to queue messages for AOAI, and also manage the rate limits for the model deployments.
 
 # The Scaling Special Sauce
 
