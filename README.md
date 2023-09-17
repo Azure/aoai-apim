@@ -49,19 +49,17 @@ Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo, the PTUs are provi
 
 Keep in mind, while having reserved capacity does provide consistent latency and througput, throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompts and generation tokens, number of simultaneous requests, and the type and version of model used.
 
-<p align="center">
 Table describing approximate TPMs expected in relation to PTUs, per model. 
-</p>
-<p align="center">
-  <img src=![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)>
-</p>
+img src=![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
 
 ## Limits
-As organizations scale using Azure OpenAI, they will rate **limits** on how fast tokens are processed, in the prompt+completion. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. It is important to note the overall size of tokens for rate limiing include BOTH the prompt (text sent to the AOAI model) size PLUS the return completion (response back from the model) size, and also this token limt varies for each different AOIA model type. 
-For example,  with a quota of 240,000 TPM for GPT-35-Turbo in Azure East US region, you can have a single deployment of 240K TPM, 2 deployments of 120K TPM each, or any number of deployments in one or multiple deployments as long as the TPMs add up to 240K (or less) total in that region.
-As our customers are scaling, they can add an additional Azure OpenAI account in the same region, as described here: https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal
+As organizations scale using Azure OpenAI, there will rate **limits** on how fast tokens are processed, in the prompt+completion as described in the previous section. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. 
+It is important to note the overall size of tokens for rate limiing include BOTH the prompt (text sent to the AOAI model) size PLUS the return completion (response back from the model) size, and also this token limt varies for each different AOIA model type. 
+For example,  with a quota of 240,000 TPM for GPT-35-Turbo in Azure East US region, you can have a single deployment of 240K TPM, 2 deployments of 120K TPM each, or any number of deployments in one or multiple deployments as long as the TPMs add up to 240K (or less) total in that region in East US.
 
-The maximum Azure OpenAI resources per region per Azure subscription is 30 (at the time of this writing) and also depending on regional capacity **availability.** This limit may increase in the future. https://learn.microsoft.com/en-us/azure/ai-services/openai/quotas-limits
+As our customers are scaling, they can [add an additional Azure OpenAI accounts](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal).
+
+The maximum Azure OpenAI resources per region per Azure subscription is 30 (at the time of this writing) and also dependant on regional capacity **availability.** 
 
 # Scaling (Single Region)
 There are other articles/repos which describe this basic scenario, and also provide configurations for the basic APIM setup used with AOAI, so we will not re-invent the wheel here. Example: https://github.com/Azure-Samples/openai-python-enterprise-logging
