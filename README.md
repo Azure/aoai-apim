@@ -3,18 +3,18 @@
 # Azure OpenAI Using PTUs/TPMs With API Management     	- Using the Scaling Special Sauce
 
 ## Introduction
-While there are already a few reference architectures available for using Azure OpenAI and Azure OpenAI Landing Zones, this article will focus on AOAI + APIM, **deploying at scale** using PTUs (Reserved Capacity) and TPM (Pay-As-You-Go), and best practices around this.
+While there are already a few articles and reference architectures available for using Azure OpenAI and Azure OpenAI Landing Zones, this article/repo focuses on AOAI + APIM, **deploying at scale** using PTUs (Reserved Capacity) and/or TPM (Pay-As-You-Go), and best practices around this.
 
 ### Brief Review of AOAI and APIM
 
-<br>  Azure OpenAI (AOAI): Azure OpenAI Service provides generative AI technology for all using REST API access to OpenAI's powerful language models including the GPT-4, GPT-35-Turbo, and Embeddings model series and others. You can read additional details on using AOAI here: https://azure.microsoft.com/en-us/products/ai-services/openai-service
+**Azure OpenAI (AOAI)**: Azure OpenAI Service provides generative AI technology for all using REST API access to OpenAI's powerful language models including the GPT-4, GPT-35-Turbo, and Embeddings model series and others. By now, you should be already be familiar with the [Azure OpenAI service](https://azure.microsoft.com/en-us/products/ai-services/openai-service). 
 
-<br> API Management (APIM): APIs are the foundation of an API Management service instance. Each API represents a set of operations available to app developers.
+**API Management (APIM)**: APIs are the foundation of an API Management service instance. Each API represents a set of operations available to app developers.
 Each API contains a reference to the backend service that implements the API, and its operations map to backend operations. 
-Operations in API Management are highly configurable, with control over URL mapping, query and path parameters, request and response content, and operation response caching. You can read additional details on using APIM here <https://learn.microsoft.com/en-us/azure/api-management/api-management-key-concepts> 
+Operations in API Management are highly configurable, with control over URL mapping, query and path parameters, request and response content, and operation response caching. You can read [additional details on using APIM](https://learn.microsoft.com/en-us/azure/api-management/api-management-key-concepts).
+
 
 Azure OpenAI provides an API endpoint to consume the AOAI service, and APIM utilzies this AOAI endpoint.
-
 Using APIM with AOAI, you can manage and implement policies to allow queing, rate throttling, error handling, and manaage usage quotas.
 When using Azure OpenAI with API Management, this gives you the most flexibility in terms of both queing prompts (text sent to AOAI) as well as return code/error handling management. More later in this document on using APIM with AOAI.
 ![image](https://github.com/Azure/AI-in-a-Box/assets/9942991/15d5d9a2-60d4-457e-8d4d-f4a6277cccd2)
@@ -26,7 +26,7 @@ Microsoft recently introduced a new quota management system along with the abili
 
 ### TPMs
 Azure OpenAI's quota management feature enables assignment of rate limits to your deployments, up-to a global limit called your “quota”. Quota is assigned to your subscription on a per-region, per-model basis in units of Tokens-per-Minute (TPM), by default. This TPM billing is also known as pay-as-you-go, where pricing will be based on the pay-as-you-go consumption model, with a price per unit for each model. When you onboard a subscription to Azure OpenAI, you'll receive default quota for most available models. Then, you'll assign TPM to each deployment as it is created, and the available quota for that model will be reduced by that amount. 
-TPMs/Pay-as-you-go are also the deafult mechanism for billing the AOAI service. Our focus for this article is not billing/pricing, but you can learn more about the [AOAI quota managment](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest) or [Azure OpenAI pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/)
+TPMs/Pay-as-you-go are also the deafult mechanism for billing the AOAI service. Our focus for this article is not billing/pricing, but you can learn more about the [AOAI quota managment](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest) or [Azure OpenAI pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/).
 
 ### RPMs
 A Requests-Per-Minutes (RPMs) rate limit will also be enforced whose value is set proportionally to the TPM assignment using the following ratio:
@@ -55,10 +55,12 @@ As our customers are scaling, they can add an additional Azure OpenAI account in
 
 The maximum Azure OpenAI resources per region per Azure subscription is 30 (at the time of this writing) and also depending on regional capacity **availability.** This limit may increase in the future. https://learn.microsoft.com/en-us/azure/ai-services/openai/quotas-limits
 
-# Scaling
+# Scaling (Single Region)
 There are other articles/repos which describe this basic scenario, and also provide configurations for the basic APIM setup used with AOAI, so we will not re-invent the wheel here. Example: https://github.com/Azure-Samples/openai-python-enterprise-logging
 
 ![image](https://github.com/Azure/AI-in-a-Box/assets/9942991/fb524952-564b-4623-9d70-c54a1f5a869d)
+
+Now is a good time to introduce how to queue messages for AOAI AND also manage the rate limits for the model deployments.
 
 # The Scaling Special Sauce
 
