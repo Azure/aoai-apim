@@ -53,7 +53,7 @@ Keep in mind, while having reserved capacity does provide consistent latency and
 Table describing approximate TPMs expected in relation to PTUs, per model. 
 </p>
 <p align="center">
-  <img width="460" height="300" src=![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)>
+  <img src=![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)>
 </p>
 
 ## Limits
