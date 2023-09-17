@@ -52,7 +52,9 @@ Keep in mind, while having reserved capacity does provide consistent latency and
 <p align="center">
 Table describing approximate TPMs expected in relation to PTUs, per model. 
 </p>
-![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
+<p align="center">
+  <img width="460" height="300" src=![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)>
+</p>
 
 ## Limits
 As organizations scale using Azure OpenAI, they will rate **limits** on how fast tokens are processed, in the prompt+completion. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. It is important to note the overall size of tokens for rate limiing include BOTH the prompt (text sent to the AOAI model) size PLUS the return completion (response back from the model) size, and also this token limt varies for each different AOIA model type. 
