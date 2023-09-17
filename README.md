@@ -50,8 +50,10 @@ Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo, the PTUs are provi
 
 Keep in mind, while having reserved capacity does provide consistent latency and througput, throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompts and generation tokens, number of simultaneous requests, and the type and version of model used.
 
-Table describing approximate TPMs expected in relation to PTUs, per model. 
-![image](https://github.com/Azure/aoai-apim/assets/9942991/5fb56ef8-2a0c-4575-b757-62d5592e00ce)
+Table describing approximate TPMs expected in relation to PTUs, per model.
+
+![image](https://github.com/Azure/aoai-apim/assets/9942991/e6618652-afc9-4d52-b161-362ab5597205)
+
 
 ## Limits
 As organizations scale using Azure OpenAI, as described above, there are rate **limits** on how fast tokens are processed, in the prompt+completion request. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. 
