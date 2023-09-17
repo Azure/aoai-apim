@@ -37,19 +37,22 @@ While RPM is not a billing component directly, it is important to note that whil
 1) On a per **second** basis, not at the per **minute** billing level. And,
 2) The rate limit will occur at either TPS (tokens-per-second) or RPM evalauted over a small period of time (1-10 seconds). That is, if you exceed the total tokens per second for a specific model, then a rate limit applies. If you exceed the RPM over a short time period, then a rate limit will also apply, returning limit errod codes (429).
 
-The throttled rate limits can be easily managed using the special scaling sauce, as well as following some of the best practices described later in this document.
+The throttled rate limits can easily be managed using the scaling special sauce, as well as following some of the best practices described later in this document.
 
-You can read about the [quota management and details on how TPM/RPM rate limit](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest)
+You can read about [quota management and the details on how TPM/RPM rate limits apply](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest).
 
 ### PTUs 
-Beyond the default TPMs described above, a new Azure OpenAI service feature called Provisioned Throughput Units (PTUs), which defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions. Microsoft recently introduced a new quota management system along with the ability to use reserved capacity, Provisioned Throughput Units (PTU), for AOAI earlier this summer. 
-PTUs are purchased as a monthly commitment with an auto-renewal option, which reserves AOAI capacity against an Azure subscription, using a specific model, in a specific Azure region. 
-Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo, the PTUs are provisioned for only GPT 3.5 Turbo and not for GPT 4, for example. You can have a seperate PTUs for GPT 4, with minimum PTUs described in the table below.  
+Microsoft recently introduced the ability to use reserved capacity, Provisioned Throughput Units (PTU), for AOAI earlier this summer.
+Beyond the default TPMs described above, this new Azure OpenAI service feature, PTUs, defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions.  
+PTUs are purchased as a monthly commitment with an auto-renewal option, which will RESERVE AOAI capacity within an Azure subscription, using a specific model, in a specific Azure region. 
+Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo, the PTUs are provisioned for only GPT 3.5 Turbo deployments, wihtin a specific Azure subscription, and not for GPT 4. You can have seperate PTUs for GPT 4, with minimum PTUs described in the table below.  
 
-Keep in mind, while having reserved capacity does provide consistent latency and througput, the throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompts and generation tokens, number of simultaneous requests, and the type and version of model used.
+Keep in mind, while having reserved capacity does provide consistent latency and througput, throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompts and generation tokens, number of simultaneous requests, and the type and version of model used.
 
+<p align="center">
 Table describing approximate TPMs expected in relation to PTUs, per model. 
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
+</p>
 
 ## Limits
 As organizations scale using Azure OpenAI, they will rate **limits** on how fast tokens are processed, in the prompt+completion. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. It is important to note the overall size of tokens for rate limiing include BOTH the prompt (text sent to the AOAI model) size PLUS the return completion (response back from the model) size, and also this token limt varies for each different AOIA model type. 
