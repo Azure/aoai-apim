@@ -89,7 +89,8 @@ Note the above error is specifc to an response status code equal to '429', which
 Without this scaling special sauce (APIM using retries with exponential backoff), once the initial rate limit is hit, say due to many concurrent users sending too many prompts, then a '429' error return code (server busy) response code is sent back. As addtional subsequent prompts/completions are being sent, then the issue can be compounded quickly as more 429 errors are are returned, and the error rates increase further and further. 
 It is with the retries with exponential backoff where you able to scale many thousands of users with very low error responses, providing scalability of the AOAI service.
  
-In addition to using Azure APIM supports content based routing. Content based routing is where the message routing endpoint is determined by the contents of the message at runtime. For example, if your model API request states a specific version, say gpt-35-turbo-16k, you can then route this request to your GPT 3.5 Turbo (16K) PTUs deployment. We won't get into too much details here, but there are additional repo examples in the references section at the end of this repo.
+In addition, Azure APIM supports content based routing. Content based routing is where the message routing endpoint is determined by the contents of the message at runtime. You can leverage this to send AOAI prompts to multiple AOAI accounts, including both PTUs and TPMs, for meeting further scaling requirements.
+For example, if your model API request states a specific version, say gpt-35-turbo-16k, you can then route this request to your GPT 3.5 Turbo (16K) PTUs deployment. We won't get into too much details here, but there are additional repo examples in the references section at the end of this repo.
 
 # Multi-Region
 
