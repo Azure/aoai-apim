@@ -131,23 +131,21 @@ Please take a lookg at the multi-region APIM best practices below (item #4) to u
 
 	![image](https://github.com/Azure/aoai-apim/assets/9942991/ca44d6fc-4336-44d6-8e73-b8b71ade19fb)
 
-**3. Purchasing PTUs**
-Charges for PTUs are billed **up-front** for the entire month, starting on the day of purchase. The PTUs are not charged in arrears, after the service has been used over the month period.
-Also, the month period is not on exact first of month to the end of the month, but instead when the PTUs were purchased. For example, if you purchased and applied the PTUs on the 9th day of the month, then you will be
-		
-PTUs can be added to a commitment mid-month, but cannot be reduced
-If a commitment is not renewed, deployed PTUs will revert to per hour pricing
-		
-	
-4.  Multi-Region APIM:
+3. Purchasing PTUs
+   Charges for PTUs are billed **up-front** for the entire month, starting on the day of purchase. The PTUs are not charged in arrears, after the service has been used over the month period.
+   Also, the month period does not necessarily on exact first of month to the end of the month, but instead when the PTUs were purchased. For example, if you purchased and applied the PTUs on the 9th day of the month, then you will be charged from the 9th until the following month, 8th day.
+   * As the term of the committment is one month, PTUs can not be reduced. However, PTUs can be _added_ to a commitment mid-month.
+   * If a commitment is not renewed, deployed PTUs will be reverted to to per hour pricing.
+			
+4. Multi-Region APIM:
 	Azure API Management has 3 _production_ level tiers - Basic, Standard, and Premium.
-Upgrade and scale an Azure API Management instance | Microsoft Learn
-	
-The Premium tier enables you to distribute a single Azure API Management instance across any number of desired Azure regions. When you initially create an Azure API Management service, the instance contains only one unit and resides in a single Azure region (the primary region).
-What does this provide? If you have a multi-regional Azure OpenAI deployment, does this mean you are required to also have a multi-region (Premium) SKU of APIM? No, not necessarily!
-	What the Premium SKU gives you is the ability to have one region be the primary and any number of regions as seondar
-	
-How to deploy an Azure API Management service instance to multiple Azure regions.
+	The Premium tier enables you to distribute a single Azure API Management instance across any number of desired Azure regions. When you initially create an Azure API Management service, the instance contains only one unit and resides in a single Azure region (the primary region).
+	What does this provide? If you have a multi-regional Azure OpenAI deployment, does this mean you are required to also have a multi-region (Premium) SKU of APIM? No, not necessarily! As you can see in the multi-region archiecture above, a single APIM service instance can support multi-region, multi-AOAI accounts. Having a single APIM service makes sense when an application using the service is in the same region. If you have a secondary APIM service instance in another region, this
+The Premium SKU gives you is the ability to have one region be the primary and any number of regions as seondaries. Then when should use secondary, or secondaries? 
+	1> If you are planning for any DR scenarios, which is always recommeneded for any enterprise architecture. Note: Your enterprise applications should then also be designed for data resilency, using DR strategies.
+   2> If you . As you are monitoring the APIM services, if you are seeing extremely heavy usage and can scale out your applications across regions, then it does make s
+
+	For more information on [how to deploy an Azure API Management service instance to multiple Azure regions](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-deploy-multi-region).
 
 ### Additional Best Practices 
 Rate limit best practices from <https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest> 
