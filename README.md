@@ -12,17 +12,15 @@ While there are already a few articles and reference architectures available for
 **API Management (APIM)**: APIs are the foundation of an API Management service instance. Each API represents a set of operations available to app developers.
 Each API contains a reference to the backend service that implements the API, and its operations map to backend operations. 
 Operations in API Management are highly configurable, with control over URL mapping, query and path parameters, request and response content, and operation response caching. You can read [additional details on using APIM](https://learn.microsoft.com/en-us/azure/api-management/api-management-key-concepts).
-In this article, we will cover configurations for APIM against AOAI service, and scaling.
+In this article, we will cover configurations for APIM against AOAI service, and scaling this.
 
 Azure OpenAI provides an API endpoint to consume the AOAI service, and APIM utilzies this AOAI endpoint.
 Using APIM with AOAI, you can manage and implement policies to allow queing, rate throttling, error handling, and manaage usage quotas.
 When using Azure OpenAI with API Management, this gives you the most flexibility in terms of both queing prompts (text sent to AOAI) as well as return code/error handling management. More later in this document on using APIM with AOAI.
-![image](https://github.com/Azure/AI-in-a-Box/assets/9942991/15d5d9a2-60d4-457e-8d4d-f4a6277cccd2)
 
-
-## TPMs, RPMs and PTUs
-First, let's define TPMs and PTUs.  As we continue understanding scaling of the Azure OpenAI service, we Azure OpenAI's quota management feature enables assignment of rate limits to your deployments. TPM's and PTUs are also used for billing purposes.
-Microsoft recently introduced a new quota management system along with the ability to use reserved capacity, Provisioned Throughput Units (PTU), for AOAI ealrier this summer.  In this article, we will describe both TPMs and PTUs, as this is critical for scaling of services.
+## Understanding TPMs, RPMs and PTUs
+First, let's define TPMs, RPMs and PTUs in the sections below. 
+As we continue understanding scaling of the Azure OpenAI service, the Azure OpenAI's quota management feature enables assignment of rate limits to your deployments. It is important to remember that TPM's and PTUs are rate limits, AND are also used for billing purposes.
 
 ### TPMs
 Azure OpenAI's quota management feature enables assignment of rate limits to your deployments, up-to a global limit called your “quota”. Quota is assigned to your subscription on a per-region, per-model basis in units of Tokens-per-Minute (TPM), by default. This TPM billing is also known as pay-as-you-go, where pricing will be based on the pay-as-you-go consumption model, with a price per unit for each model. When you onboard a subscription to Azure OpenAI, you'll receive default quota for most available models. Then, you'll assign TPM to each deployment as it is created, and the available quota for that model will be reduced by that amount. 
@@ -40,12 +38,13 @@ All of this can be mitigated with the special sauce described below as well as f
 https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest
 
 ### PTUs 
-Beyond the default TPMs described above, a new Azure OpenAI service feature called Provisioned Throughput Units (PTUs), which defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions.
-
+Beyond the default TPMs described above, a new Azure OpenAI service feature called Provisioned Throughput Units (PTUs), which defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions. Microsoft recently introduced a new quota management system along with the ability to use reserved capacity, Provisioned Throughput Units (PTU), for AOAI earlier this summer. 
 PTUs are purchased as a monthly commitment with an auto-renewal option, which reserves AOAI capacity against an Azure subscription, using a specific model, in a specific Azure region. 
-Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo 
+Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo, the PTUs are provisioned for only GPT 3.5 Turbo and not for GPT 4, for example. You can have a seperate PTUs for GPT 4, with minimum PTUs described in the table below.  
 
-While having reserved capacity does provide consistent latency and througput, the throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompt and generation tokens, number of simultaneous requests, however here is a table describing approximate TPMs expected in relation to PTUs, per model. 
+Keep in mind, while having reserved capacity does provide consistent latency and througput, the throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompts and generation tokens, number of simultaneous requests, and the type and version of model used.
+
+Table describing approximate TPMs expected in relation to PTUs, per model. 
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
 
 ## Limits
