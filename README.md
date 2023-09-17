@@ -19,23 +19,27 @@ Using APIM with AOAI, you can manage and implement policies to allow queing, rat
 When using Azure OpenAI with API Management, this gives you the most flexibility in terms of both queing prompts (text sent to AOAI) as well as return code/error handling management. More later in this document on using APIM with AOAI.
 
 ## Understanding TPMs, RPMs and PTUs
-First, let's define TPMs, RPMs and PTUs in the sections below. 
-As we continue understanding scaling of the Azure OpenAI service, the Azure OpenAI's quota management feature enables assignment of rate limits to your deployments. It is important to remember that TPM's and PTUs are rate limits, AND are also used for billing purposes.
+First, let's define TPMs, RPMs and PTUs in this section.
+As we continue understanding scaling of the Azure OpenAI service, the Azure OpenAI's quota management feature enables assignment of rate limits to your deployments. It is important to remember that TPM's and PTUs are rate limits AND are also used for billing purposes.
 
 ### TPMs
-Azure OpenAI's quota management feature enables assignment of rate limits to your deployments, up-to a global limit called your “quota”. Quota is assigned to your subscription on a per-region, per-model basis in units of Tokens-per-Minute (TPM), by default. This TPM billing is also known as pay-as-you-go, where pricing will be based on the pay-as-you-go consumption model, with a price per unit for each model. When you onboard a subscription to Azure OpenAI, you'll receive default quota for most available models. Then, you'll assign TPM to each deployment as it is created, and the available quota for that model will be reduced by that amount. 
-TPMs/Pay-as-you-go are also the deafult mechanism for billing the AOAI service. Our focus for this article is not billing/pricing, but you can learn more about the [AOAI quota managment](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest) or [Azure OpenAI pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/).
+Azure OpenAI's quota management feature enables assignment of rate limits to your deployments, up-to a global limit called your “quota”. Quota is assigned to your subscription on a per-region, per-model basis in units of Tokens-per-Minute (TPM), by default. The billing component of TPMs is also known as pay-as-you-go, where pricing will be based on the pay-as-you-go consumption model, with a price per unit for each model. 
 
-### RPMs
-A Requests-Per-Minutes (RPMs) rate limit will also be enforced whose value is set proportionally to the TPM assignment using the following ratio:
+When you onboard a subscription to Azure OpenAI, you'll receive default quota for most available models. Then, you'll assign TPM to each deployment as it is created, and the available quota for that model will be reduced by that amount. 
+TPMs/Pay-as-you-go are also the **deafult** mechanism for billing the AOAI service. 
+Our focus for this article is not billing/pricing, but you can learn more about the [AOAI quota managment](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest) or [Azure OpenAI pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/).
+
+### RPM
+A Requests-Per-Minute (RPM) rate limit will also be enforced whose value is set proportionally to the TPM assignment using the following ratio:
 6 RPM per 1000 TPM
 
-It is important to note that although the billing for AOAI service is token-based (TPM), the actual triggers which rate limit is based occurs:
-1) On a** per second basis.** Not at the per minute billing level. And,
-2) This rate limit will occur at either TPS (tokens-per-second) or RPS (request-per-second). That is, if you exceed the total tokens per second for a specific model, then there is a rate limit applied. In addition, while you can have a small number of TPS, it is possible to then exceed the you can exceed the number of requests per second and rate limiting will kick-in as well.
-All of this can be mitigated with the special sauce described below as well as following some of the best practices described later in this document.
+While RPM is not a billing component directly, it is important to note that while the billing for AOAI service is token-based (TPM), the actual triggers which rate limit is based occurs:
+1) On a per **second** basis, not at the per **minute** billing level. And,
+2) The rate limit will occur at either TPS (tokens-per-second) or RPM evalauted over a small period of time (1-10 seconds). That is, if you exceed the total tokens per second for a specific model, then a rate limit applies. If you exceed the RPM over a short time period, then a rate limit will also apply, returning limit errod codes (429).
 
-https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest
+The throttled rate limits can be easily managed using the special scaling sauce, as well as following some of the best practices described later in this document.
+
+You can read about the [quota management and details on how TPM/RPM rate limit](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest)
 
 ### PTUs 
 Beyond the default TPMs described above, a new Azure OpenAI service feature called Provisioned Throughput Units (PTUs), which defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions. Microsoft recently introduced a new quota management system along with the ability to use reserved capacity, Provisioned Throughput Units (PTU), for AOAI earlier this summer. 
