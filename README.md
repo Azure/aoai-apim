@@ -12,7 +12,7 @@ While there are already a few articles and reference architectures available for
 **API Management (APIM)**: APIs are the foundation of an API Management service instance. Each API represents a set of operations available to app developers.
 Each API contains a reference to the backend service that implements the API, and its operations map to backend operations. 
 Operations in API Management are highly configurable, with control over URL mapping, query and path parameters, request and response content, and operation response caching. You can read [additional details on using APIM](https://learn.microsoft.com/en-us/azure/api-management/api-management-key-concepts).
-If you have used GitHub, then likely you are already familiar with APIs, and we will focus on configurations for APIM against AOAI service.
+In this article, we will cover configurations for APIM against AOAI service, and scaling.
 
 Azure OpenAI provides an API endpoint to consume the AOAI service, and APIM utilzies this AOAI endpoint.
 Using APIM with AOAI, you can manage and implement policies to allow queing, rate throttling, error handling, and manaage usage quotas.
