@@ -76,17 +76,20 @@ Now is a good time to introduce how to queue messages for AOAI AND also manage t
 So how do we control (or queue) messages when using multiple Azure OpenAI instances (accounts)? How do we manage return error codes highly efficently to optimize the AOAI experience?
 
 As a best practice, Microsoft recommends the use of **retry logic** whenever using a service such as AOAI.  With APIM, this will allow us do this easily, but with some secret sauce added it... using the concept of _retries with exponential backoff_.
-Retries with exponential backoff is a technique that retries an operation, with an exponentially increasing wait time, up to a maximum retry count has been reached (the exponential backoff). This technique embraces the fact that cloud resources might intermittently be unavailable for more than a few seconds for any reason, or more likely using AOAI, if an error is returned due to too many tokens per second (or requests per second) in a large scale deployment.
+Retries with exponential backoff is a technique that retries an operation, with an exponentially increasing wait time, up to a maximum retry count has been reached (the exponential backoff). This technique embraces the fact that cloud resources might intermittently be unavailable for more than a few seconds for any reason, or more likely using AOAI, if an error is returned due to too many tokens per second (or RPM) in a large scale deployment.
 
-You can enable This can be accomplished via the APIM Retry Policy, https://learn.microsoft.com/en-us/azure/api-management/retry-policy
+This can be accomplished via the [APIM Retry Policy](https://learn.microsoft.com/en-us/azure/api-management/retry-policy).
 
 	<retry condition="@(context.Response.StatusCode == 429 || context.Response.StatusCode >= 500)" interval="1" delta="1" max-interval="30" count="13">
 
 Note the above error is specifc to an response status code equal to '429', which is the return code for 'server busy', which states too many concurrent requests were sent to the model.
+
 **And extremely important**: When the APIM **interval, max-interval AND delta** parameters are specified, then an **exponential interval retry algorithm** is automatically applied. 
-It is with this exponential retry special sauce where you able to scale many thousands of users with very low error responses.
-Without this special sauce, then once the initial rate limit is hit, say due to many concurrent users sending prompts, then a '429' error return code (server busy) response is sent back. As addtional subsequent prompts/completions are occuring, then the issue can be compounded quickly as errors are are returned, subsequent is further com the latency and error issues compound further and further. That is, 
-In addition to using Azure APIM supports content based routing. Content based routing is where the message routing endpoint is determined by the contents of the message at runtime. For example, if your model API request states a specific version, say gpt-35-turbo-16k, you can then route this request to your GPT 3.5 Turbo (16K) PTUs deployment.
+
+Without this scaling special sauce (APIM using retries with exponential backoff), once the initial rate limit is hit, say due to many concurrent users sending too many prompts, then a '429' error return code (server busy) response code is sent back. As addtional subsequent prompts/completions are being sent, then the issue can be compounded quickly as more 429 errors are are returned, and the error rates increase further and further. 
+It is with the retries with exponential backoff where you able to scale many thousands of users with very low error responses, providing scalability of the AOAI service.
+ 
+In addition to using Azure APIM supports content based routing. Content based routing is where the message routing endpoint is determined by the contents of the message at runtime. For example, if your model API request states a specific version, say gpt-35-turbo-16k, you can then route this request to your GPT 3.5 Turbo (16K) PTUs deployment. We won't get into too much details here, but there are additional repo examples in the references section at the end of this repo.
 
 # Multi-Region
 
