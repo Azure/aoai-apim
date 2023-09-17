@@ -98,8 +98,11 @@ For example, if your model API request states a specific version, say gpt-35-tur
 
 # Multi-Region
 
+As described in the single-region scenario above, you can use APIM to queue and send prompts to any AOAI endpoint, as long as those endpoints can be reached. In a multi-region example below, we have two AOAI accounts in one region (one PTU and another TPM), and then a 3rd Azure OpenAI account in another Azure region.  A single API Management service is easily able to scale and support many AOAI accounts, even across multiple regions.
 
+![image](https://github.com/Azure/aoai-apim/assets/9942991/0a213a72-4006-4eda-abcc-50c534100c4e)
 
+Please take a lookg at the multi-region APIM best practices below.
 
 # Best Practices
 
