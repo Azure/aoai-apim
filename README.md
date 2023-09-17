@@ -26,12 +26,12 @@ Microsoft recently introduced a new quota management system along with the abili
 
 ### TPMs
 Azure OpenAI's quota management feature enables assignment of rate limits to your deployments, up-to a global limit called your “quota”. Quota is assigned to your subscription on a per-region, per-model basis in units of Tokens-per-Minute (TPM), by default. This TPM billing is also known as pay-as-you-go, where pricing will be based on the pay-as-you-go consumption model, with a price per unit for each model. When you onboard a subscription to Azure OpenAI, you'll receive default quota for most available models. Then, you'll assign TPM to each deployment as it is created, and the available quota for that model will be reduced by that amount. 
-TPMs/Pay-as-you-go are also the deafult mechanism for billing the AOAI service. Our focus for this article is not billing/pricing, but you can learn more about the AOAI quota managment here:  https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest
+TPMs/Pay-as-you-go are also the deafult mechanism for billing the AOAI service. Our focus for this article is not billing/pricing, but you can learn more about the [AOAI quota managment](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest) or [Azure OpenAI pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/)
 
 ### RPMs
 A Requests-Per-Minutes (RPMs) rate limit will also be enforced whose value is set proportionally to the TPM assignment using the following ratio:
 6 RPM per 1000 TPM
-- Uses [LangChain](https://langchain.readthedocs.io/en/latest/) as a wrapper
+
 It is important to note that although the billing for AOAI service is token-based (TPM), the actual triggers which rate limit is based occurs:
 1) On a** per second basis.** Not at the per minute billing level. And,
 2) This rate limit will occur at either TPS (tokens-per-second) or RPS (request-per-second). That is, if you exceed the total tokens per second for a specific model, then there is a rate limit applied. In addition, while you can have a small number of TPS, it is possible to then exceed the you can exceed the number of requests per second and rate limiting will kick-in as well.
@@ -46,7 +46,7 @@ PTUs are purchased as a monthly commitment with an auto-renewal option, which re
 Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo 
 
 While having reserved capacity does provide consistent latency and througput, the throughput is highly dependent on your scenario. Throughput will be affected by a few items including number and ratio of prompt and generation tokens, number of simultaneous requests, however here is a table describing approximate TPMs expected in relation to PTUs, per model. 
-![image](https://github.com/Azure/aoai-apim/assets/9942991/de2a6f26-e6ae-4fb3-a55a-410ac207d916)
+![image](https://github.com/Azure/aoai-apim/assets/9942991/c2ae768f-0be5-4a44-a88a-cfe9cd574023)
 
 ## Limits
 As organizations scale using Azure OpenAI, they will rate **limits** on how fast tokens are processed, in the prompt+completion. There is a limit to how much text prompts can be sent due to these token limits for each model that can be consumed in a single request+response. It is important to note the overall size of tokens for rate limiing include BOTH the prompt (text sent to the AOAI model) size PLUS the return completion (response back from the model) size, and also this token limt varies for each different AOIA model type. 
@@ -75,8 +75,7 @@ Note the above error is specifc to an response status code equal to '429', which
 **And extremely important**: When the APIM **interval, max-interval AND delta** parameters are specified, then an **exponential interval retry algorithm** is automatically applied. 
 It is with this exponential retry special sauce where you able to scale many thousands of users with very low error responses.
 Without this special sauce, then once the initial rate limit is hit, say due to many concurrent users sending prompts, then a '429' error return code (server busy) response is sent back. As addtional subsequent prompts/completions are occuring, then the issue can be compounded quickly as errors are are returned, subsequent is further com the latency and error issues compound further and further. That is, 
-In addition to using Azure APIM supports content based routing. Content based routing is where the message routing endpoint is determined by the contents of the message at runtime. 
-
+In addition to using Azure APIM supports content based routing. Content based routing is where the message routing endpoint is determined by the contents of the message at runtime. For example, if your model API request states a specific version, say gpt-35-turbo-16k, you can then route this request to your GPT 3.5 Turbo (16K) PTUs deployment.
 
 # Multi-Region
 
