@@ -69,11 +69,11 @@ The maximum Azure OpenAI resources per region per Azure subscription is 30 (at t
 There are other articles/repos which describe this basic scenario, and also provide configurations for the basic APIM setup used with AOAI, so we will not re-invent the wheel here. Examples are in the Reference Section near the end of this article. 
 However, it is important to note that you can create a "spillover" scenerio, where you may be sending prompts to PTUs enabled deployment of an AOAI account, and then if you exceed PTU limits, then send (or spillover) onto TPM enabled AOAI account, used in the pay-as-you-go.
 
-Here is the basic setup, however this architecture can scale and also include many other resources.
+Here is the basic setup, however this architecture can scale and also include many other resources, however for simplicity and focus, only relevant services are depicted here:
 ![image](https://github.com/Azure/aoai-apim/assets/9942991/e587916f-c5e0-43bd-ad87-386db17437f2)
 
 
-Now is a good time to introduce on scaling, how to queue messages for AOAI, and also manage the rate limits for the model deployments.
+We will take this a step further to understand how to queue messages for AOAI, and also manage the rate limits and return code/error handling for the AOAI model deployments.
 
 # The Scaling Special Sauce
 
