@@ -70,8 +70,7 @@ There are other articles/repos which describe this basic scenario, and also prov
 However, it is important to note that you can create a "spillover" scenario, where you may be sending prompts to PTUs enabled deployment of an AOAI account, and then if you exceed PTU limits, then send (or spillover) onto TPM enabled AOAI account, used in the pay-as-you-go.
 
 Here is the basic setup, however this architecture can scale and also include many other resources, however for simplicity and focus, only relevant services are depicted here:
-![image](https://github.com/Azure/aoai-apim/assets/9942991/e587916f-c5e0-43bd-ad87-386db17437f2)
-
+![image](https://github.com/Azure/aoai-apim/assets/9942991/896b69b8-5251-4ed6-a189-e887f9071515)
 
 We will take this a step further to understand how to queue messages for AOAI, and also manage the rate limits and return code/error handling for the AOAI model deployments.
 
@@ -104,7 +103,7 @@ As described in the single-region scenario above, you can use APIM to queue and 
 
 A single API Management service can easily scale and support many AOAI accounts, even across multiple regions.
 
-![image](https://github.com/Azure/aoai-apim/assets/9942991/0a213a72-4006-4eda-abcc-50c534100c4e)
+![image](https://github.com/Azure/aoai-apim/assets/9942991/c44fa3bc-5980-4d21-900f-6f87c7716f1f)
 
 Please take a look at the multi-region APIM best practices below (item #4) to understand when to use additional APIM instances.
 
