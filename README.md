@@ -96,6 +96,8 @@ It is with the retries with exponential backoff where you able to scale many tho
 In addition, Azure APIM supports content based routing. Content based routing is where the message routing endpoint is determined by the contents of the message at runtime. You can leverage this to send AOAI prompts to multiple AOAI accounts, including both PTUs and TPMs, for meeting further scaling requirements.
 For example, if your model API request states a specific version, say gpt-35-turbo-16k, you can then route this request to your GPT 3.5 Turbo (16K) PTUs deployment. We won't get into too much details here, but there are additional repo examples in the references section at the end of this repo.
 
+In the [infra](./infra/) directory you will find a sample Bicep template to deploy Azure APIM and an API that applies this exponential retry logic and optional failover between different Azure OpenAI deployments. You will need to have an Azure subscription and two Azure OpenAI LLM deployments. Once deployed, you will need to give the APIM's system assigned managed identity the role of Cognitive Services OpenAI User on the Azure OpenAI accounts it's connected to, and add any required networking configurations.
+
 # Multi-Region
 
 As described in the single-region scenario above, you can use APIM to queue and send prompts to any AOAI endpoint, as long as those endpoints can be reached. In a multi-region example below, we have two AOAI accounts in one region (one PTU and another TPM), and then a 3rd Azure OpenAI account in another Azure region.  
