@@ -33,7 +33,7 @@ Our focus for this article is not billing/pricing, but you can learn more about 
 A Requests-Per-Minute (RPM) rate limit will also be enforced whose value is set proportionally to the TPM assignment using the following ratio:
 6 RPM per 1000 TPM
 
-RPM is not a billing component directly, however it is a component of rate limits. It is important to note that while the billing for AOAI service is token-based (TPM), the actual triggers which rate limits occur are as follows:
+RPM is not a billing component directly, however it is a component of rate limits. It is important to note that while the billing for AOAI service is token-based (TPM), the actual two triggers which rate limits occur are as follows:
 1) On a per **second** basis, not at the per **minute** billing level. And,
 2) The rate limit will occur at either TPS (tokens-per-second) or RPM evaluated over a small period of time (1-10 seconds). That is, if you exceed the total tokens per second for a specific model, then a rate limit applies. If you exceed the RPM over a short time period, then a rate limit will also apply, returning limit error codes (429).
 
