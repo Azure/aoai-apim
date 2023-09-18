@@ -3,7 +3,7 @@
 # Azure OpenAI Using PTUs/TPMs With API Management     	- Using the Scaling Special Sauce
 
 ## Introduction
-While there are already a few articles and reference architectures available for using Azure OpenAI and Azure OpenAI Landing Zones, this article/repo focuses on AOAI + APIM, **deploying at scale** using PTUs (Reserved Capacity) and/or TPM (Pay-As-You-Go), and best practices around this.
+While there are already a few articles and reference architectures available for using Azure OpenAI and Azure OpenAI Landing Zones, this article/repo focuses on AOAI + APIM, **deploying at scale** using PTUs (Reserved Capacity) and TPM (Pay-As-You-Go), and best practices around this.
 
 ### Brief Review of AOAI and APIM
 
