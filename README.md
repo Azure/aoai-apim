@@ -122,7 +122,7 @@ Please take a look at the multi-region APIM best practices below (item #4) to un
 	424 (v0301 AOAI Models)	| Server Busy (Rate limit reached for requests) | APIM - Retries with Exponential Backoff | Same as above
 	408  | Request timeout | APIM Retry with interval | Many reasons why a timeout could occur, such as a network connection/transient error.
 	50x |	Internal server error due to transient error or backend AOAI internal error |	APIM Retry with interval| See Retry Policy Link below
-	400 |	Other issue with the prompt, such as size too large for model type | Use APIM Logic to return custom error immediately | No further processing needed.
+	400 |	Other issue with the prompt, such as size too large for model type | Use APIM Logic or applicaiton logic to return custom error immediately | No further processing needed.
 
 	**Retry Policy**: https://learn.microsoft.com/en-us/azure/api-management/retry-policy	
 	
