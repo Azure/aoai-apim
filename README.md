@@ -42,8 +42,8 @@ The throttled rate limits can easily be managed using the scaling special sauce,
 You can read more about [quota management and the details on how TPM/RPM rate limits apply](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest).
 
 ### PTUs 
-Microsoft recently introduced the ability to use reserved capacity, or Provisioned Throughput Units (PTU), for AOAI earlier this summer.
-Beyond the default TPMs described above, this new Azure OpenAI service feature, PTUs, defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions.  
+Microsoft has the the ability to use reserved capacity, or Provisioned Throughput Units (PTU), for AOAI. The newer offering is PTU-M (Managed), where the backend compute is abstracted away, pooling of resoruces.
+Beyond the default TPMs described above, this Azure OpenAI service feature, PTUs, defines the model processing capacity, **using reserved resources**, for processing prompts and generating completions.  
 
 PTUs are purchased as a monthly commitment with an auto-renewal option, which will RESERVE AOAI capacity within an Azure subscription, using a specific model, in a specific Azure region. 
 Let's say if you have 300 PTUs provisioned for GPT 3.5 Turbo, the PTUs are provisioned for only GPT 3.5 Turbo deployments, within a specific Azure subscription, and not for GPT 4. You can have separate PTUs for GPT 4, with minimum PTUs for each base model.  
